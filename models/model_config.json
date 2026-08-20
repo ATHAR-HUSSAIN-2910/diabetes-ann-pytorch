@@ -1,0 +1,10 @@
+{
+    "threshold": 0.4,
+    "input_size": 21,
+    "hidden_size_1": 96,
+    "hidden_size_2": 32,
+    "dropout": 0.2,
+    "learning_rate": 0.0012123634441485443,
+    "weight_decay": 3.0210752570094987e-06,
+    "batch_size": 128
+}
