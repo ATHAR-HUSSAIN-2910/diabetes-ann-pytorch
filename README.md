@@ -1,8 +1,18 @@
-# Diabetes Prediction using Artificial Neural Network with PyTorch and Optuna
+# 🩺 Diabetes Prediction using Artificial Neural Network with PyTorch & Optuna
 
 A portfolio-focused deep learning project that uses a **PyTorch Artificial Neural Network (ANN)** to predict diabetes from health-related, lifestyle, and demographic indicators.
 
-The project follows a complete deep learning workflow, including **data exploration, preprocessing, leakage prevention, PyTorch Dataset/DataLoader creation, ANN development, manual training and validation, hyperparameter optimization with Optuna, early stopping, threshold optimization, model evaluation, artifact saving, and inference**.
+The project follows a complete end-to-end deep learning workflow, including **exploratory data analysis, preprocessing, leakage prevention, PyTorch Dataset/DataLoader creation, ANN development, manual training and validation, hyperparameter optimization with Optuna, early stopping, threshold optimization, model evaluation, artifact saving, inference, and Streamlit deployment**.
+
+## 🚀 Live Demo
+
+### Try the deployed application
+
+👉 **[Launch Diabetes Prediction App - https://athars-diabetes-ann-pytorch.streamlit.app/](https://athars-diabetes-ann-pytorch.streamlit.app/)**
+
+The application provides an interactive interface for entering patient-related health indicators and obtaining a model prediction along with the predicted probability.
+
+> ⚠️ **Disclaimer:** This application is intended for educational and portfolio purposes only. It is **not a medical diagnostic system** and must not be used for medical decisions.
 
 ---
 
@@ -12,7 +22,7 @@ Diabetes prediction is a binary classification problem where the objective is to
 
 In this project, I built a feed-forward **Artificial Neural Network using PyTorch** and optimized its hyperparameters using **Optuna**.
 
-The main goal was not simply to maximize accuracy, but to build a **clean, reproducible, and deployment-oriented deep learning workflow**.
+The main goal was not simply to maximize accuracy, but to build a **clean, reproducible, leakage-safe, and deployment-oriented deep learning workflow**.
 
 ### Workflow
 
@@ -44,11 +54,13 @@ Final Test Evaluation
 Model + Scaler + Configuration Saving
    ↓
 Inference Pipeline
+   ↓
+Streamlit Deployment
 ```
 
 ---
 
-## 🎯 Problem Statement
+# 🎯 Problem Statement
 
 The objective of this project is to predict whether an individual has diabetes based on **21 health-related and demographic features**.
 
@@ -77,7 +89,7 @@ The project uses the **Diabetes Health Indicators Dataset** available on Kaggle.
 diabetes_binary_5050split_health_indicators_BRFSS2015.csv
 ```
 
-### Dataset Summary
+## Dataset Summary
 
 | Property            |             Value |
 | ------------------- | ----------------: |
@@ -134,7 +146,7 @@ Income
 
 Several EDA steps were performed before model development.
 
-### Target Distribution
+## Target Distribution
 
 The target variable is perfectly balanced:
 
@@ -143,7 +155,7 @@ No Diabetes → 50%
 Diabetes     → 50%
 ```
 
-### Important Correlations
+## Important Correlations
 
 The strongest positive Pearson correlations with the target included:
 
@@ -168,7 +180,7 @@ The strongest negative correlations included:
 
 These correlations describe **linear relationships** with the target and are not treated as definitive feature importance for the neural network.
 
-### EDA Included
+## EDA Included
 
 * Target distribution analysis
 * Feature distributions
@@ -198,7 +210,7 @@ A fixed random seed of **42** was used.
 
 Stratified splitting was applied to preserve the class distribution across the three datasets.
 
-### Final Dataset Sizes
+## Final Dataset Sizes
 
 | Dataset    | Samples | Features |
 | ---------- | ------: | -------: |
@@ -216,9 +228,11 @@ The scaler was fitted **only on the training data**.
 
 ```text
 FIT
+  ↓
 Training data only
 
 TRANSFORM
+  ↓
 Training data
 Validation data
 Test data
@@ -262,7 +276,7 @@ Linear(32 → 1)
 Logit
 ```
 
-### Why One Output?
+## Why One Output?
 
 This is a binary classification problem, so the network produces a **single logit**.
 
@@ -294,7 +308,7 @@ The model outputs raw logits instead of applying a Sigmoid layer internally.
 
 `BCEWithLogitsLoss` combines the sigmoid operation and binary cross-entropy calculation into a numerically stable loss function.
 
-This is the recommended approach for binary classification with a single-output PyTorch network.
+This is an appropriate approach for binary classification with a single-output PyTorch network.
 
 ---
 
@@ -326,7 +340,7 @@ The **test set was not used during hyperparameter optimization**.
 
 This keeps the test set independent for final model evaluation.
 
-### Hyperparameters Tuned
+## Hyperparameters Tuned
 
 The Optuna search included:
 
@@ -338,7 +352,7 @@ The Optuna search included:
 
 ---
 
-## 🏆 Best Optuna Trial
+# 🏆 Best Optuna Trial
 
 The best trial achieved:
 
@@ -346,7 +360,7 @@ The best trial achieved:
 Validation ROC-AUC: 0.8309
 ```
 
-### Best Hyperparameters
+## Best Hyperparameters
 
 | Hyperparameter | Best Value |
 | -------------- | ---------: |
@@ -427,9 +441,11 @@ Several thresholds were evaluated using the **validation dataset**.
 |      0.65 |     0.788 |  0.632 | 0.701 |
 |      0.70 |     0.806 |  0.543 | 0.649 |
 
-Among the tested thresholds, **0.45** produced the highest validation F1-score (0.778), with **0.40** close behind (0.777). The threshold of **0.40** was selected for final evaluation to favor recall while keeping the F1-score close to its peak.
+Among the tested thresholds, **0.45** produced the highest validation F1-score (0.778), with **0.40** close behind (0.777).
 
-### Why Use 0.40?
+The threshold of **0.40** was selected for final evaluation to favor recall while keeping the F1-score close to its peak.
+
+## Why Use 0.40?
 
 Lowering the threshold makes the model more likely to classify an observation as positive.
 
@@ -565,6 +581,26 @@ This allows the saved model to be reused on new observations without retraining 
 
 ---
 
+# 🌐 Streamlit Deployment
+
+The trained model has been deployed as an interactive **Streamlit web application**.
+
+### Live Application
+
+**[Open the Diabetes Prediction App](https://athars-diabetes-ann-pytorch.streamlit.app/)**
+
+The Streamlit application loads the saved model, scaler, and configuration artifacts and provides an interactive interface for making predictions.
+
+The application entry point is:
+
+```text
+streamlit_app.py
+```
+
+The file is located in the **root directory** of the project.
+
+---
+
 # 📁 Project Structure
 
 ```text
@@ -591,6 +627,7 @@ diabetes-ann-pytorch/
 │       ├── final_metrics.csv
 │       └── threshold_comparison.csv
 │
+├── streamlit_app.py
 ├── .gitignore
 ├── README.md
 └── requirements.txt
@@ -612,6 +649,7 @@ diabetes-ann-pytorch/
 | Optuna           | Hyperparameter optimization    |
 | KaggleHub        | Programmatic dataset download  |
 | Joblib           | Saving preprocessing artifacts |
+| Streamlit        | Web application and deployment |
 | Jupyter Notebook | Development environment        |
 
 ---
@@ -651,7 +689,15 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-## 5. Open the Notebook
+## 5. Run the Streamlit Application
+
+```bash
+streamlit run streamlit_app.py
+```
+
+The application will open in your browser.
+
+## 6. Run the Notebook
 
 Open:
 
@@ -724,6 +770,7 @@ This project provided practical experience with:
 * Evaluating binary classifiers
 * Saving and loading model artifacts
 * Building a reusable inference pipeline
+* Deploying a PyTorch model using Streamlit
 
 ---
 
@@ -738,7 +785,6 @@ Possible future improvements include:
 * Experiment tracking
 * Model explainability
 * API deployment
-* Interactive web application
 * Containerization with Docker
 
 ---
@@ -774,10 +820,12 @@ Aspiring Data Scientist & Machine Learning Engineer
 * Achieved **77.57% F1-score** at the selected threshold
 * Built a reusable inference pipeline
 * Saved model weights, preprocessing, and configuration artifacts
+* Deployed the trained model as a **Streamlit web application**
+* Created a reproducible, deployment-oriented deep learning workflow
 
 ---
 
-## 📌 Final Takeaway
+# 📌 Final Takeaway
 
 The most important outcome of this project is not simply the accuracy score.
 
@@ -785,26 +833,28 @@ The project demonstrates an end-to-end deep learning workflow where:
 
 ```text
 Data
- ↓
+  ↓
 EDA
- ↓
+  ↓
 Leakage-Safe Preprocessing
- ↓
+  ↓
 PyTorch Dataset & DataLoader
- ↓
+  ↓
 ANN
- ↓
+  ↓
 Optuna Optimization
- ↓
+  ↓
 Early Stopping
- ↓
+  ↓
 Threshold Optimization
- ↓
+  ↓
 Evaluation
- ↓
+  ↓
 Model Saving
- ↓
+  ↓
 Inference
+  ↓
+Streamlit Deployment
 ```
 
 The final model achieved:
@@ -817,4 +867,8 @@ F1      : 77.57%
 
 The selected threshold of **0.40** prioritizes higher recall while maintaining a reasonable balance between precision and recall.
 
-This makes the project a practical demonstration of building, optimizing, evaluating, and preparing a **PyTorch deep learning model for reuse**.
+The project demonstrates the complete process of **building, optimizing, evaluating, packaging, and deploying a PyTorch deep learning model for reuse**.
+
+### 🔗 Live Demo
+
+**[Try the Diabetes Prediction Application →](https://athars-diabetes-ann-pytorch.streamlit.app/)**
